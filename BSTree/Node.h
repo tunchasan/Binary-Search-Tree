@@ -16,6 +16,8 @@ public:
 
 	Node *left = NULL;
 
+	int familyCount = -1;
+
 public:
 
 	//Kurucu
