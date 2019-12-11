@@ -1,13 +1,25 @@
+/**
+* @file  BSTree
+* @description Kabaca 2'li arama aðaçlarý arasýnda soy aðaç sayýlarýna baðlý olarak ekleme , silme iþlemi yapan konsol uygulamasý.
+* @course  2B
+* @assignment  3.Ödev
+* @date  10.12.2019
+* @author  Ahmet Kayacý / G171210010
+**/
+
 #include "pch.h"
 #include "BinaryTree.h"
 
 int globalInt = -1;
 
-Node * BinaryTree::getNumber(Node *tree, int rakam)
+//Agaca sayý alan ve aðaçta gerekli yere yerleþtiren fonk.
+Node * BinaryTree::sayiAl(Node *tree, int rakam)
 {
 	if (tree == NULL) {
 
 		tree = tree->createNode(rakam, NULL, NULL);
+
+		kok = tree;
 
 		return tree;
 
@@ -15,68 +27,184 @@ Node * BinaryTree::getNumber(Node *tree, int rakam)
 
 	else if (tree->Number < rakam || tree->Number == rakam) {
 
-		tree->right = getNumber(tree->right, rakam);
+		tree->right = sayiAl(tree->right, rakam);
+
+		kok = tree;
 
 		return tree;
 	}
 
-	tree->left = getNumber(tree->left, rakam);
+	tree->left = sayiAl(tree->left, rakam);
+
+	kok = tree;
 
 	return tree;
 }
 
-void BinaryTree::findFamilyCount(Node *root)
+//Her düðüme ait soy sayýsýný bulan ve toplam soy sayýsýný hesaplayan fonk.
+void BinaryTree::soySayisiBul(Node *root)
 {
 	if (root == NULL)
 		return;
 
-	findFamilyCount(root->left);
+	soySayisiBul(root->left);
 
-	updateFamilyCount(root);
+	soySayiciGuncelle(root);
 
 	root->familyCount = globalInt;
-
-	totalCount += globalInt;
+	//Toplam Soy Sayýsý
+	toplamSoy += globalInt;
 
 	globalInt = -1;
 
-	findFamilyCount(root->right);
+	soySayisiBul(root->right);
 
 }
 
-void BinaryTree::updateFamilyCount(Node *root) {
+//Her düðüme ait soy sayýsýný güncelleyen fonksiyon.
+void BinaryTree::soySayiciGuncelle(Node *root) {
 
 	if (root == NULL)
 		return;
 
-	updateFamilyCount(root->left);
+	soySayiciGuncelle(root->left);
 
 	//Sayaç
 	globalInt++;
 
-	updateFamilyCount(root->right);
+	soySayiciGuncelle(root->right);
 }
 
-int BinaryTree::getTotalCount()
+//toplamSay Return eden get fonksiyonu
+int BinaryTree::toplamSoyAl()
 {
-	return totalCount;
+	return toplamSoy;
 }
 
-void BinaryTree::writeTree(Node *root)
+//Agacta postOrder gezinme yapan ve agacý yazdýran fonk.
+void BinaryTree::agacYazdir(Node *root)
 {
-	postorderTravel(root);
-
-	//cout << endl << getTotalCount();
+	postorderGezinme(root);
 }
 
-void BinaryTree::postorderTravel(Node *root) {
+//Her agaca ait soy sayýsýný sýfýrlayan fonk.
+void BinaryTree::soySayiSifirla() {
+
+	toplamSoy = 0;
+}
+
+//Agacý silen fonk.
+void BinaryTree::agaciSil(Node *root)
+{
+	if (root == NULL)
+		return;
+
+	agaciSil(root->left);
+
+	delete(root);
+
+	root = NULL;
 
 	if (root == NULL)
 		return;
 
-	writeTree(root->left);
+	agaciSil(root->right);
+}
 
-	writeTree(root->right);
+//En küçük ve en büyük sayýyý bulup sildik.
+Node * BinaryTree::sayiSil()
+{	
+
+	//En küçük sayýsý bulduk
+	Node*temp = kok;
+
+	while (temp->left->left != NULL)
+		temp = temp->left;
+
+	//Eðer en küçük sayýsýný alt elemaný var ise
+	if (temp->left->right != NULL) {
+
+		Node*temp2 = temp->left->right;
+		//En küçük sayý silindi.
+		delete(temp->left);
+
+		temp->left = temp2;
+
+	}
+
+	else { 
+		//En küçük sayý silindi.
+		delete(temp->left);
+
+		temp->left = NULL;
+	}
+	//////////////////////////////////////
+
+	temp = kok;
+	
+	//En büyük sayýyý bulduk.
+	while (temp->right->right != NULL)
+		temp = temp->right;
+
+	if (temp->right->left != NULL) {
+
+		Node*temp2 = temp->right->left;
+		//En büyük sayý silindi.
+		delete(temp->right);
+
+		temp->right = temp2;
+
+	}
+
+	else {
+
+		//En büyük sayý silindi.
+		delete(temp->right);
+
+		temp->right = NULL;
+	}
+
+	return kok;
+}
+
+//En büyük sayýyý bulan fonk.
+int BinaryTree::enBuyukSayiAl()
+{
+	Node*temp = kok;
+
+	//En büyük sayý bulundu.
+	while (temp->right != NULL)
+		temp = temp->right;
+
+	return temp->Number;
+}
+
+//En küçük sayýyý bulan fonk.
+int BinaryTree::enKucukSayiAl()
+{
+	Node*temp = kok;
+
+	while (temp->left != NULL)
+		temp = temp->left;
+
+	return temp->Number;
+}
+
+//Agacýn kokunu döndüren get fonk.
+Node * BinaryTree::kokuAl()
+{
+	return kok;
+}
+
+//Agacta postorder gezinerek elemanlarý yazdýran fonk.
+void BinaryTree::postorderGezinme(Node *root) {
+
+	if (root == NULL)
+		return;
+
+	agacYazdir(root->left);
+
+	agacYazdir(root->right);
 	
 	cout << "<" << root->Number << "," << root->familyCount << "> ";
 }

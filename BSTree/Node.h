@@ -6,9 +6,12 @@
 
 using namespace std;
 
+//Dugum sýnýfý
 class Node {
 
-public:
+private:
+
+	friend class BinaryTree;
 
 	int Number = -1;
 
@@ -22,6 +25,8 @@ public:
 
 	//Kurucu
 	Node* createNode(int, Node*, Node*);
+
+	int getNumber();
 
 	Node();
 

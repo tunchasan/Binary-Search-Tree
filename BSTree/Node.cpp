@@ -1,3 +1,12 @@
+/**
+* @file  BSTree
+* @description Kabaca 2'li arama aðaçlarý arasýnda soy aðaç sayýlarýna baðlý olarak ekleme , silme iþlemi yapan konsol uygulamasý.
+* @course  2B
+* @assignment  3.Ödev
+* @date  10.12.2019
+* @author  Ahmet Kayacý / G171210010
+**/
+
 #include "pch.h"
 #include "Node.h"
 
@@ -15,7 +24,10 @@ Node *Node::createNode(int number, Node *right, Node *left)
 	return newNode;
 }
 
-//Empty Constructor
-Node::Node() {
-
+int Node::getNumber()
+{
+	return Number;
 }
+
+//Empty Constructor
+Node::Node() {}

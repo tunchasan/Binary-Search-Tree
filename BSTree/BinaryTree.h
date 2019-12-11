@@ -7,32 +7,47 @@ class BinaryTree {
 
 private:
 
-	//Root of the tree.
-	Node* root = NULL;
+	friend class Game;
 
-	int totalCount = 0;
+	//Root of the tree.
+	Node* kok = NULL;
+
+	int toplamSoy = 0;
 
 public:
 
-	//Getting number for assining the tree.
-	Node*getNumber(Node*,int);
+	//Agac sayý ekleyen fonk.
+	Node* sayiAl(Node*,int);
 
-	int findTotalFamilCount();
+	//Her bir düðüm için soy sayýsý bulan fonk.
+	void soySayisiBul(Node*);
 
-	//Find the familyCount for each node.
-	void findFamilyCount(Node*);
+	//Postorder Agacta gezinme
+	void postorderGezinme(Node*);
 
-	//Write the Binary Tree
-	void postorderTravel(Node*);
+	//Soy agacý güncelleyen fonk.
+	void soySayiciGuncelle (Node*);
 
-	//
-	void updateFamilyCount (Node*);
+	//toplam Soy agacýný return eden fonk.
+	int toplamSoyAl();
 
-	//getfamily Total Count
-	int getTotalCount();
+	//Agacý yazdýran fonk.
+	void agacYazdir(Node*);
 
-	//write tree
-	void writeTree(Node*);
+	//En büyük ve en küçük sayýsý silen fonk.
+	Node* sayiSil();
+
+	//En büyük sayiyý bulan fonk.
+	int enBuyukSayiAl();
+	//En kücük sayýyý bulan fonk.
+	int enKucukSayiAl();
+	//Agacýn kokunu alan fonk.
+	Node* kokuAl();
+	//Soy sayýsýný sýfýrlayan fonk.
+	void soySayiSifirla();
+	//Agacý silen fonk.
+	void agaciSil(Node*);
+
 };
 
 #endif
